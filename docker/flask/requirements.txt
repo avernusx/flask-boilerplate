@@ -4,7 +4,7 @@ Flask-RESTful==0.3.5
 validate_email==1.3
 requests-oauthlib==0.8.0
 bcrypt==3.1.3
-marshmallow==2.13.5
+marshmallow==2.15.1
 marshmallow-validators==2.0.0
 marshmallow-jsonschema==0.3.0
 python-dateutil==2.6.0
@@ -26,8 +26,7 @@ sqlalchemy_schemadisplay
 SQLAlchemy==1.1.10
 sqlalchemy-diff==0.1.3
 psycopg2==2.6.2
-alembic==0.8.9
-alembic-verify==0.1.4
+flask-alembic
 Flask-SQLAlchemy==2.2
 redis==2.10.5
 rq==0.8.0
