@@ -1,0 +1,41 @@
+version: '2.1'
+services:
+  postgresql:
+    build: ./docker/postgresql
+    environment:
+      - PGDATA=/var/lib/postgresql/site
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/site
+    ports:
+      - "127.0.0.1:${PG_EXTERNAL_PORT:-1500}:1500"
+  redis:
+    image: redis:3.0
+    volumes:
+      - ./volumes/redis:/data
+  flask:
+    build: ./docker/flask
+    depends_on:
+      - postgresql
+      - redis
+    environment:
+      - PYTHONUNBUFFERED=0
+      - ENV_TYPE=dev
+      - PYTHONPATH=/srv/site
+    volumes:
+      - ./flask:/srv/site
+      - ./docker/flask/supervisor.conf:/supervisor.conf
+      - ./volumes/log:/var/log
+  nginx:
+    image: openresty/openresty:xenial
+    depends_on:
+     - flask
+    volumes:
+      - ./docker/nginx/start.sh:/start.sh
+      - ./docker/nginx/site.conf:/usr/local/openresty/nginx/conf/conf.d/default.conf
+      - ./docker/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./static/uploads:/var/www/uploads
+      - ./volumes/log:/var/log
+    ports:
+     - "127.0.0.1:${NGINX_EXTERNAL_PORT:-9000}:80"
+    entrypoint: /bin/bash
+    command: /start.sh
