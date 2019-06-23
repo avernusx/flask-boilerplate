@@ -1,6 +1,8 @@
 import argparse
 import subprocess
 import os
+import unittest
+import flask_testing
 from app import app, alembic
 
 
@@ -21,26 +23,31 @@ def run():
             port=5000,
         )
 
-PARSER = argparse.ArgumentParser(description='Manage instance.')
+PARSER = argparse.ArgumentParser(description='Помощь')
 
 PARSER.add_argument('--run', action='store_true', help='Запуск приложения')
 PARSER.add_argument('--history', action='store_true', help='История миграций')
 PARSER.add_argument('--upgrade', action='store_true', help='Накатить миграции')
 PARSER.add_argument('--downgrade', action='store_true', help='Откатить миграции')
+PARSER.add_argument('--test', action='store_true', help='Запустить тесты')
 
 if __name__ == '__main__':
     ARGS = PARSER.parse_args()
     if ARGS.run:
         run()
-    if ARGS.history:
+    elif ARGS.history:
         with app.app_context():
             print(alembic.log())
-    if ARGS.history:
+    elif ARGS.history:
         with app.app_context():
             alembic.log()
-    if ARGS.upgrade:
+    elif ARGS.upgrade:
         with app.app_context():
             alembic.upgrade()
-    if ARGS.downgrade:
+    elif ARGS.downgrade:
         with app.app_context():
             alembic.downgrade()
+    elif ARGS.test:
+        unittest.main()
+    else:
+        PARSER.print_help()

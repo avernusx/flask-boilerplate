@@ -18,9 +18,8 @@ bs4
 jsonfinder
 captcha
 XlsxWriter==1.0.2
-
-# generate db schema draw
-sqlalchemy_schemadisplay
+pylint
+nose2
 
 # db
 SQLAlchemy==1.1.10
