@@ -25,7 +25,8 @@ skip = ['__pycache__']
 for folder in os.listdir('./modules'):
     if os.path.isdir(os.path.join('./modules', folder)) and folder not in skip:
         module = import_module('modules.' + folder)
-        app.register_blueprint(module.blueprint)
+        if hasattr(module, 'blueprint'):
+            app.register_blueprint(module.blueprint)
         app.config['ALEMBIC']['version_locations'] = (
                 folder, 'modules/{}/migrations'.format(folder)
         )

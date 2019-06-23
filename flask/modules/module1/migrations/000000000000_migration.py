@@ -1,5 +1,6 @@
 from alembic import op
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, text
+from sqlalchemy.dialects.postgresql import UUID
 
 
 # revision identifiers, used by Alembic.
@@ -11,6 +12,9 @@ depends_on = None
 
 def upgrade():
     op.create_table('test',
+        Column('id', UUID,
+               server_default=text('gen_random_uuid()'),
+               primary_key=True),
         Column('test', String())
     )
 
